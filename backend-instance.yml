@@ -1,0 +1,13 @@
+apiVersion: tmax.io/v1
+kind: TemplateInstance
+metadata:
+  name: cicd-wapl-math-backend-instance
+  namespace: 
+spec:
+  template:
+    metadata:
+      name: cicd-backend-template
+    parameters:
+      - name: 
+        value: 
+   

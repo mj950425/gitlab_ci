@@ -1,0 +1,11 @@
+kind: TemplateInstance
+metadata:
+  name: cicd-auth-instance
+  namespace: 
+spec:
+  template:
+    metadata:
+      name: 
+    parameters:
+      - name: 
+        value: 

@@ -1,0 +1,83 @@
+objectKinds:
+  - Deployment
+  - Service (LoadBalancer)
+parameters:
+  - description: dep-name
+    name: dep
+    valueType: string
+urlDescription: 'http://url.example.com'
+metadata:
+  name: auth-template
+  namespace: 
+  labels:
+    handled: f
+provider: tmax
+objects:
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: '${pvc-name}-pvc-template'
+      namespace: 
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: 
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: '${dep}-dep-template'
+      name: '${dep}-dep-template'
+    spec:
+      selector:
+        matchLabels:
+          app: '${dep}-dep-template'
+      template:
+        metadata:
+          labels:
+            app: '${dep}-dep-template'
+        spec:
+          volumes:
+            - name: '${pvc-name}-pvc-template'
+              persistentVolumeClaim:
+                claimName: '${pvc-name}-pvc-template'
+          containers:
+            - env:
+                - name: APP_PORT
+                  value: '${APP_PORT-name}'
+              image: 
+              name: dep
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: '2'
+                  memory: 4Gi
+                requests:
+                  cpu: '2'
+                  memory: 4Gi
+              volumeMounts:
+                - name: '${pvc-name}-pvc-template'
+                  mountPath: '${mountPath-name}'
+          imagePullSecrets:
+            - name: 
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: '${service-name}-service-template'
+      namespace: 
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: '${dep}-dep-template'
+imageUrl: example.com/example.gif
+kind: Template
+

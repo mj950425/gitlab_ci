@@ -1,0 +1,82 @@
+objectKinds:
+  - Deployment
+  - Service (LoadBalancer)
+parameters:
+  - description: 
+    name: 
+    valueType: string
+urlDescription: 'http://url.example.com'
+metadata:
+  name: te
+  namespace: 
+  labels:
+    handled: f
+provider: 
+objects:
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: '${pvc-name}-pvc-template'
+      namespace: 
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: 
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: '${backend}-dep-template'
+      name: '${backend}-dep-template'
+    spec:
+      selector:
+        matchLabels:
+          app: '${backend}-dep-template'
+      template:
+        metadata:
+          labels:
+            app: '${backend}-dep-template'
+        spec:
+          volumes:
+            - name: '${pvc-name}-pvc-template'
+              persistentVolumeClaim:
+                claimName: '${pvc-name}-pvc-template'
+          containers:
+            - env:
+                - name: 
+                  value: 
+              image: 
+              name: 
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+              resources:
+                limits:
+                  cpu: '2'
+                  memory: 4Gi
+                requests:
+                  cpu: '2'
+                  memory: 4Gi
+              volumeMounts:
+                - name: '${pvc-name}-pvc-template'
+                  mountPath: '${mountPath}'
+          imagePullSecrets:
+            - name:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: '${service-name}-service-template'
+      namespace: 
+    spec:
+      ports:
+        - name: http
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: '${backend}-dep-template'
+imageUrl: example.com/example.gif
+kind: Template
