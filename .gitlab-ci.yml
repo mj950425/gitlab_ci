@@ -49,7 +49,7 @@ docker-build:
     - docker info
     - docker build -t [IP]/${IMAGE_NAME}:${CI_COMMIT_TAG} .
     - docker login -u  -p  [IP]
-    - docker push wapl-math.220.90.208.8.nip.io:443/${IMAGE_NAME}:${CI_COMMIT_TAG}
+    - docker push *.*.*.*.*.*.*:*/${IMAGE_NAME}:${CI_COMMIT_TAG}
     - kubectl get deployments 
     - envsubst '${IMAGE_NAME} ${CI_COMMIT_TAG}' <backend-template.yml | kubectl apply -f -
     - kubectl apply -f backend-instance.yml 
